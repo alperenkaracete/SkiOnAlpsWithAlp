@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,13 +11,15 @@ public class FallDawnDetector : MonoBehaviour
 
     [SerializeField] AudioClip soundClip;
     bool falldownCount=false;
+
+    public event Action<float> PlayerFall;
     void OnTriggerEnter2D(Collider2D other) {
        if (other.tag == "Ground" && !falldownCount){
             fallDown.Play();     
             GetComponent<PlayerController>().disableMove();   
             falldownCount=true;
             GetComponent<AudioSource>().PlayOneShot(soundClip);
-            Invoke ("crashDelay",crashDelaynum);            
+            PlayerFall.Invoke(crashDelaynum);            
        }
    }
    void crashDelay(){
